@@ -9,7 +9,7 @@ Webpage: http://jupyter.org/'
 configure jupyter-notebook (
 @begin
     - name: Copy jupyter.yaml
-      get_url: url=jupyter.yaml dest=/tmp/jupyter-tensorflow-notebook.yaml
+      get_url: url=https://raw.githubusercontent.com/amcaar/ansible-role-jupyter/master/jupyter.yaml dest=/tmp/jupyter-tensorflow-notebook.yaml
 
     - name: Create Kubernetes jupyter namespace 
       command: kubectl create ns jupyter
