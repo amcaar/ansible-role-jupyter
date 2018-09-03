@@ -1,0 +1,30 @@
+description jupyter-notebook (
+    kind = 'component' and
+    short = 'A tool to share scientific documents.' and
+    content = 'The Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. 
+
+Webpage: http://jupyter.org/'
+)
+
+configure jupyter-notebook (
+@begin
+    - name: Copy jupyter.yaml
+      get_url: url=jupyter.yaml dest=/tmp/jupyter-tensorflow-notebook.yaml
+
+    - name: Create Kubernetes jupyter namespace 
+      command: kubectl create ns jupyter
+	  
+    - name:  Apply deployment to jupyter namespace  
+      command: kubectl apply -f /tmp/jupyter-tensorflow-notebook.yaml --namespace jupyter
+
+    - name: Create Kubernetes jupyter service
+      command: kubectl create -f /tmp/jupyter-tensorflow-notebook.yaml
+@end
+)
+
+configure front (
+@begin
+  - tasks:
+    - include: jupyter-notebook.yml
+@end
+)
