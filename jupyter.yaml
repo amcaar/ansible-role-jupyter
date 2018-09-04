@@ -32,6 +32,6 @@ spec:
     app: jupyter-notebook
   ports:
   - protocol: TCP
-    nodePort: 30041
+    nodePort: 30040
     port: 8888
     targetPort: 8888
