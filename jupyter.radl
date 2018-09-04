@@ -6,19 +6,31 @@ description jupyter-notebook (
 Webpage: http://jupyter.org/'
 )
 
+network public (
+    outbound = 'yes' and
+    outports contains '8888/tcp' and
+    outports contains '30040/tcp'
+)
+
 configure jupyter-notebook (
 @begin
+    - name: wait for kubernetes to restart
+      wait_for: timeout=50
+      delegate_to: localhost
+
     - name: Copy jupyter.yaml
       get_url: url=https://raw.githubusercontent.com/amcaar/ansible-role-jupyter/master/jupyter.yaml dest=/tmp/jupyter-tensorflow-notebook.yaml
 
     - name: Create Kubernetes jupyter namespace 
-      command: kubectl create ns jupyter
-	  
+      command: kubectl create namespace jupyter
+      
     - name:  Apply deployment to jupyter namespace  
       command: kubectl apply -f /tmp/jupyter-tensorflow-notebook.yaml --namespace jupyter
 
     - name: Create Kubernetes jupyter service
       command: kubectl create -f /tmp/jupyter-tensorflow-notebook.yaml
+      ignore_errors: yes
+
 @end
 )
 
@@ -28,3 +40,4 @@ configure front (
     - include: jupyter-notebook.yml
 @end
 )
+
